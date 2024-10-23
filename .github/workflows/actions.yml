@@ -1,31 +1,25 @@
 name: test
-
 on: [push]
 permissions:
   contents: write
-
 jobs:
   test:
     name: test
     runs-on: ubuntu-latest
-
-  steps:
-    - name: checkout
-      uses: actions/checkout@v3
-
-    - name: setup go
-      uses: actions/setup-go@v3
-      with:
-        go-version-file: go.mod
-
-    - name: run tests
-      run: go test ./... -coverprofile=./cover.out -covermode=atomic -coverpkg=./...
-
-    - name: generate cover badge
-      uses: vladopajic/go-test-coverage@v2
-      with:
-        profile: cover.out
-        locale-prefix: github.com/gkits/sqlnull
-        threshold-total: 95
-        git-token: ${{ github.ref_name == 'main' && secrets.GITHUB_TOKEN || '' }}
-        git-branch: badges
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+      - name: setup go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+      - name: run tests
+        run: go test ./... -coverprofile=./cover.out -covermode=atomic -coverpkg=./...
+      - name: generate cover badge
+        uses: vladopajic/go-test-coverage@v2
+        with:
+          profile: cover.out
+          locale-prefix: github.com/gkits/sqlnull
+          threshold-total: 95
+          git-token: ${{ github.ref_name == 'main' && secrets.GITHUB_TOKEN || '' }}
+          git-branch: badges
