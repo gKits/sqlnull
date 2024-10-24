@@ -15,11 +15,11 @@ jobs:
           go-version-file: go.mod
       - name: run tests
         run: go test ./... -coverprofile=./cover.out -covermode=atomic -coverpkg=./...
-      - name: generate cover badge
+      - name: generate coverage badge
         uses: vladopajic/go-test-coverage@v2
         with:
           profile: cover.out
-          locale-prefix: github.com/gkits/sqlnull
+          local-prefix: github.com/gkits/sqlnull
           threshold-total: 95
           git-token: ${{ github.ref_name == 'main' && secrets.GITHUB_TOKEN || '' }}
           git-branch: badges
