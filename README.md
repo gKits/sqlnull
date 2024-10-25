@@ -1,6 +1,6 @@
 # SQLNull
 ![go-version-badge](https://img.shields.io/github/go-mod/go-version/gkits/sqlnull)
-![test-pipeline-badge](https://github.com/gkits/sqlnull/actions/workflows/test.yml/badge.svg)
+![test-pipeline-badge](https://img.shields.io/github/actions/workflow/status/gkits/sqlnull/test.yml)
 ![test-coverage-badge](https://raw.githubusercontent.com/gKits/sqlnull/badges/.badges/main/coverage.svg)
 
 A dead simple one stop solution to pass your database types directly to
