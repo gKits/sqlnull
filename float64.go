@@ -36,6 +36,6 @@ func (n *NullFloat64) Scan(src any) error {
 		return err
 	}
 	n.Float64 = sqln.Float64
-	n.Valid = reflect.TypeOf(src) == nil
+	n.Valid = reflect.TypeOf(src) != nil
 	return nil
 }

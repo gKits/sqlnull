@@ -37,6 +37,6 @@ func (n *NullTime) Scan(src any) error {
 		return err
 	}
 	n.Time = sqln.Time
-	n.Valid = reflect.TypeOf(src) == nil
+	n.Valid = reflect.TypeOf(src) != nil
 	return nil
 }

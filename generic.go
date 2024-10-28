@@ -37,6 +37,6 @@ func (n *Null[T]) Scan(src any) error {
 		return err
 	}
 	n.V = sqln.V
-	n.Valid = reflect.TypeOf(src) == nil
+	n.Valid = reflect.TypeOf(src) != nil
 	return nil
 }

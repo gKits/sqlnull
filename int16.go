@@ -36,6 +36,6 @@ func (n *NullInt16) Scan(src any) error {
 		return err
 	}
 	n.Int16 = sqln.Int16
-	n.Valid = reflect.TypeOf(src) == nil
+	n.Valid = reflect.TypeOf(src) != nil
 	return nil
 }

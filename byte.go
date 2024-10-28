@@ -36,6 +36,6 @@ func (n *NullByte) Scan(src any) error {
 		return err
 	}
 	n.Byte = sqln.Byte
-	n.Valid = reflect.TypeOf(src) == nil
+	n.Valid = reflect.TypeOf(src) != nil
 	return nil
 }

@@ -36,6 +36,6 @@ func (n *NullBool) Scan(src any) error {
 		return err
 	}
 	n.Bool = sqln.Bool
-	n.Valid = reflect.TypeOf(src) == nil
+	n.Valid = reflect.TypeOf(src) != nil
 	return nil
 }
