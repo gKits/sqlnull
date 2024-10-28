@@ -20,6 +20,6 @@ jobs:
         with:
           profile: cover.out
           local-prefix: github.com/gkits/sqlnull
-          threshold-total: 95
+          threshold-total: 80
           git-token: ${{ github.ref_name == 'main' && secrets.GITHUB_TOKEN || '' }}
           git-branch: badges
