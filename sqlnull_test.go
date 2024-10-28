@@ -136,7 +136,7 @@ func Test_UnmarshalJSON(t *testing.T) {
                 "time": null
             }`),
 			want: target{
-				Generic: sqlnull.Null[string]{V: "generic", Valid: false},
+				Generic: sqlnull.Null[string]{V: "", Valid: false},
 				String:  sqlnull.NullString{String: "", Valid: false},
 				Bool:    sqlnull.NullBool{Bool: false, Valid: false},
 				Byte:    sqlnull.NullByte{Byte: 0, Valid: false},
