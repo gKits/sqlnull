@@ -39,3 +39,7 @@ func (n *NullInt16) Scan(src any) error {
 	n.Valid = reflect.TypeOf(src) != nil
 	return nil
 }
+
+func (n *NullInt16) IsZero() bool {
+	return !n.Valid
+}

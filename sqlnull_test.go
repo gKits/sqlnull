@@ -24,6 +24,18 @@ type target struct {
 	Time    sqlnull.NullTime     `json:"time"`
 }
 
+type targetOmitZero struct {
+	Generic sqlnull.Null[string] `json:"generic,omitzero"`
+	String  sqlnull.NullString   `json:"string,omitzero"`
+	Bool    sqlnull.NullBool     `json:"bool,omitzero"`
+	Byte    sqlnull.NullByte     `json:"byte,omitzero"`
+	Int16   sqlnull.NullInt16    `json:"int16,omitzero"`
+	Int32   sqlnull.NullInt32    `json:"int32,omitzero"`
+	Int64   sqlnull.NullInt64    `json:"int64,omitzero"`
+	Float64 sqlnull.NullFloat64  `json:"float64,omitzero"`
+	Time    sqlnull.NullTime     `json:"time,omitzero"`
+}
+
 func Test_MarshalJSON(t *testing.T) {
 	cases := []struct {
 		name string
@@ -98,7 +110,7 @@ func Test_UnmarshalJSON(t *testing.T) {
 		want target
 	}{
 		{
-			name: "successfully marshal with values",
+			name: "successfully unmarshal with values",
 			in: []byte(`{ 
                 "generic": "generic", 
                 "string": "string",
@@ -123,7 +135,7 @@ func Test_UnmarshalJSON(t *testing.T) {
 			},
 		},
 		{
-			name: "successfully marshal with null",
+			name: "successfully unmarshal with null",
 			in: []byte(`{ 
                 "generic": null,
                 "string": null,
@@ -135,6 +147,21 @@ func Test_UnmarshalJSON(t *testing.T) {
                 "float64": null,
                 "time": null
             }`),
+			want: target{
+				Generic: sqlnull.Null[string]{V: "", Valid: false},
+				String:  sqlnull.NullString{String: "", Valid: false},
+				Bool:    sqlnull.NullBool{Bool: false, Valid: false},
+				Byte:    sqlnull.NullByte{Byte: 0, Valid: false},
+				Int16:   sqlnull.NullInt16{Int16: 0, Valid: false},
+				Int32:   sqlnull.NullInt32{Int32: 0, Valid: false},
+				Int64:   sqlnull.NullInt64{Int64: 0, Valid: false},
+				Float64: sqlnull.NullFloat64{Float64: 0, Valid: false},
+				Time:    sqlnull.NullTime{Time: time.Time{}, Valid: false},
+			},
+		},
+		{
+			name: "successfully unmarshal with empty json",
+			in:   []byte(`{}`),
 			want: target{
 				Generic: sqlnull.Null[string]{V: "", Valid: false},
 				String:  sqlnull.NullString{String: "", Valid: false},
@@ -241,6 +268,64 @@ func Test_Scan(t *testing.T) {
 			)
 			require.NoError(t, err)
 			assert.Equal(t, c.want, got)
+		})
+	}
+}
+
+func Test_MarshalJSONOmitZero(t *testing.T) {
+	cases := []struct {
+		name string
+		in   targetOmitZero
+		want string
+	}{
+		{
+			name: "successfully marshal with values",
+			in: targetOmitZero{
+				Generic: sqlnull.Null[string]{V: "generic", Valid: true},
+				String:  sqlnull.NullString{String: "string", Valid: true},
+				Bool:    sqlnull.NullBool{Bool: true, Valid: true},
+				Byte:    sqlnull.NullByte{Byte: 255, Valid: true},
+				Int16:   sqlnull.NullInt16{Int16: 16, Valid: true},
+				Int32:   sqlnull.NullInt32{Int32: 32, Valid: true},
+				Int64:   sqlnull.NullInt64{Int64: 64, Valid: true},
+				Float64: sqlnull.NullFloat64{Float64: 64.6464, Valid: true},
+				Time:    sqlnull.NullTime{Time: time.Date(2024, 10, 23, 17, 50, 0, 0, time.UTC), Valid: true},
+			},
+			want: `{ 
+                "generic": "generic",
+                "string": "string",
+                "bool": true,
+                "byte": 255,
+                "int16": 16,
+                "int32": 32,
+                "int64": 64,
+                "float64": 64.6464,
+                "time": "2024-10-23T17:50:00Z"
+            }`,
+		},
+		{
+			name: "successfully marshal empty json",
+			in: targetOmitZero{
+				Generic: sqlnull.Null[string]{V: "generic", Valid: false},
+				String:  sqlnull.NullString{String: "string", Valid: false},
+				Bool:    sqlnull.NullBool{Bool: true, Valid: false},
+				Byte:    sqlnull.NullByte{Byte: 255, Valid: false},
+				Int16:   sqlnull.NullInt16{Int16: 16, Valid: false},
+				Int32:   sqlnull.NullInt32{Int32: 32, Valid: false},
+				Int64:   sqlnull.NullInt64{Int64: 64, Valid: false},
+				Float64: sqlnull.NullFloat64{Float64: 64.6464, Valid: false},
+				Time:    sqlnull.NullTime{Time: time.Date(2024, 10, 23, 17, 50, 0, 0, time.UTC), Valid: false},
+			},
+			want: `{}`,
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(t *testing.T) {
+			got, err := json.Marshal(c.in)
+			t.Log(string(got))
+			require.NoError(t, err)
+			assert.JSONEq(t, c.want, string(got))
 		})
 	}
 }

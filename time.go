@@ -40,3 +40,7 @@ func (n *NullTime) Scan(src any) error {
 	n.Valid = reflect.TypeOf(src) != nil
 	return nil
 }
+
+func (n *NullTime) IsZero() bool {
+	return !n.Valid
+}

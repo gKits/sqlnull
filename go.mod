@@ -1,6 +1,6 @@
 module github.com/gkits/sqlnull
 
-go 1.23.2
+go 1.24
 
 require (
 	github.com/mattn/go-sqlite3 v1.14.24

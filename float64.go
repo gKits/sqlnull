@@ -39,3 +39,7 @@ func (n *NullFloat64) Scan(src any) error {
 	n.Valid = reflect.TypeOf(src) != nil
 	return nil
 }
+
+func (n *NullFloat64) IsZero() bool {
+	return !n.Valid
+}
