@@ -304,7 +304,7 @@ func Test_MarshalJSONOmitZero(t *testing.T) {
             }`,
 		},
 		{
-			name: "successfully marshal with null",
+			name: "successfully marshal empty json",
 			in: targetOmitZero{
 				Generic: sqlnull.Null[string]{V: "generic", Valid: false},
 				String:  sqlnull.NullString{String: "string", Valid: false},
