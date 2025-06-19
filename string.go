@@ -39,3 +39,7 @@ func (n *NullString) Scan(src any) error {
 	n.Valid = reflect.TypeOf(src) != nil
 	return nil
 }
+
+func (n *NullString) IsZero() bool {
+	return !n.Valid
+}
